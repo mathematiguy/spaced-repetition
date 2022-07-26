@@ -1,4 +1,5 @@
 ipython
 jupyter
 jupyterlab
-ankisync2
+anki-export
+pandas

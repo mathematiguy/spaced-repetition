@@ -49,4 +49,5 @@ RUN pip3 install -r /root/requirements.txt
 COPY pkg /code/pkg
 COPY setup.py /code
 RUN python${PYTHON_VERSION} -m pip install -e /code
-ENV PYTHONPATH="/code:${PYTHONPATH}"
+ENV PYTHONPATH="/code:${PYTHONPATH}:"
+ENV PATH="${PATH}:/home/kaimahi/.local/bin"
