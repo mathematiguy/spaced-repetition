@@ -13,17 +13,14 @@ DOCKER_ARGS ?=
 JUPYTER_PASSWORD ?= jupyter
 JUPYTER_PORT ?= 8888
 .PHONY: jupyter
-jupyter: UID=root
-jupyter: GID=root
 jupyter: DOCKER_ARGS=-u $(UID):$(GID) --rm -it -p $(JUPYTER_PORT):$(JUPYTER_PORT) -e NB_USER=$$USER -e NB_UID=$(UID) -e NB_GID=$(GID)
 jupyter:
 	$(RUN) jupyter lab \
-		--allow-root \
 		--port $(JUPYTER_PORT) \
 		--ip 0.0.0.0 \
-		--NotebookApp.password=$(shell $(RUN) \
+		--NotebookApp.password="$(shell $(RUN) \
 			python3 -c \
-			"from IPython.lib import passwd; print(passwd('$(JUPYTER_PASSWORD)'))")
+			"from notebook.auth import passwd; print(passwd('$(JUPYTER_PASSWORD)', 'sha1'))")"
 
 docker:
 	docker build $(DOCKER_ARGS) --tag $(IMAGE):$(GIT_TAG) .
